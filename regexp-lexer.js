@@ -47,7 +47,7 @@ function prepareRules(rules, macros, actions, tokens, startConditions, caseless)
         if (typeof m === 'string') {
             for (k in macros) {
                 if (macros.hasOwnProperty(k)) {
-                    m = m.split("{" + k + "}").join('(' + macros[k] + ')');
+                    m = m.split("{" + k + "}").join(macros[k]);
                 }
             }
             m = new RegExp("^(?:" + m + ")", caseless ? 'i':'');
@@ -76,7 +76,7 @@ function prepareMacros (macros) {
         for (i in macros) if (macros.hasOwnProperty(i)) {
             m = macros[i];
             for (k in macros) if (macros.hasOwnProperty(k) && i !== k) {
-                mnew = m.split("{" + k + "}").join('(' + macros[k] + ')');
+                mnew = m.split("{" + k + "}").join(macros[k]);
                 if (mnew !== m) {
                     cont = true;
                     macros[i] = mnew;
