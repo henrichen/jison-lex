@@ -50,7 +50,12 @@ function prepareRules(rules, macros, actions, tokens, startConditions, caseless)
                     m = m.split("{" + k + "}").join(macros[k]);
                 }
             }
-            m = new RegExp("^(?:" + m + ")", caseless ? 'i':'');
+            if (m.startsWith('$KEIKAI$')) {
+                m = m.trim().replace('\\b', '').substring(8);
+                m = `(function(){if (typeof ${m} !== "undefined") return ${m}();})()`
+            } else {
+                m = new RegExp("^(?:" + m + ")", caseless ? 'i' : '');
+            }
         }
         newRules.push(m);
         if (typeof rules[i][1] === 'function') {
