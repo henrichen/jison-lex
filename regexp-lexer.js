@@ -52,7 +52,7 @@ function prepareRules(rules, macros, actions, tokens, startConditions, caseless)
             }
             if (m.startsWith('$KEIKAI$')) {
                 m = m.trim().replace('\\b', '').substring(8);
-                m = `(function(){if (typeof ${m} !== "undefined") return ${m}();})()`
+                m = `function(yy){return yy.getRule('${m}');}`
             } else {
                 m = new RegExp("^(?:" + m + ")", caseless ? 'i' : '');
             }
@@ -369,7 +369,11 @@ RegExpLexer.prototype = {
         }
         var rules = this._currentRules();
         for (var i = 0; i < rules.length; i++) {
-            tempMatch = this._input.match(this.rules[rules[i]]);
+            if (typeof this.rules[rules[i]] === 'function') {
+                tempMatch = this._input.match(this.rules[rules[i]](this.yy));
+            } else {
+                tempMatch = this._input.match(this.rules[rules[i]]);
+            }
             if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
                 match = tempMatch;
                 index = i;
