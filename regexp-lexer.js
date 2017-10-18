@@ -52,7 +52,7 @@ function prepareRules(rules, macros, actions, tokens, startConditions, caseless)
             }
             if (m.startsWith('$KEIKAI$')) {
                 m = m.trim().replace('\\b', '').substring(8);
-                m = `function(yy){return yy.getRule('${m}');}`
+                m = `function(yy, input){return yy.getMatch('${m}', input);}`
             } else {
                 m = new RegExp("^(?:" + m + ")", caseless ? 'i' : '');
             }
